@@ -30,13 +30,14 @@ class ShorterStartTaskEndKeeper(object):
                     self.__visited_traces.add(trace)  # чтобы не обрабатывать одинаковые трассы
                     print("Trace number: " + trace.index)
                     flag = True
+                    # Do it again until empty the trace здесь они удаляли и заменяли циклы в трассе до тех пор пока она не пуста, нужно ли нам это - не понятно пока
                     while flag:
                         # Find the elementary cycle in trace if there are some
                         ecyc = self.e_cyc(trace)
                         if self.__no_nested_cyc: #if(noNestedCyc){
                             ecyc.sort()
                             self.add_invariant(ecyc)
-                            flag = False
+                            flag = False #неверно, надо сначала все циклы найти, а тут как будто он только один существует, вс> таки надо чистить трассу реплейсклиаром
                         else:
                             if ecyc not in self.visited_cycs:   #if( !visitedeCycs.containsKey(ecyc) ){
                                 dfg = dfg = dfg_discovery.apply(ecyc)
