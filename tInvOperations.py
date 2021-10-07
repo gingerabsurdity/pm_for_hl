@@ -34,26 +34,25 @@ class ShorterStartTaskEndKeeper(object):
                     while flag:
                         # Find the elementary cycle in trace if there are some
                         ecyc = self.e_cyc(trace)
-                        if self.__no_nested_cyc: #if(noNestedCyc){
+                        if self.__no_nested_cyc:  # if(noNestedCyc){
                             ecyc.sort()
                             self.add_invariant(ecyc)
-                            flag = False #неверно, надо сначала все циклы найти, а тут как будто он только один существует, вс> таки надо чистить трассу реплейсклиаром
+                            flag = False  # неверно, надо сначала все циклы найти, а тут как будто он только один существует, вс> таки надо чистить трассу реплейсклиаром
                         else:
-                            if ecyc not in self.visited_cycs:   #if( !visitedeCycs.containsKey(ecyc) ){
+                            if ecyc not in self.visited_cycs:  # if( !visitedeCycs.containsKey(ecyc) ){
                                 dfg = dfg = dfg_discovery.apply(ecyc)
                                 causality_graph = variants.alpha.apply(dfg)
-                                scc_of_eCyc = nx.strongly_connected_components(causality_graph) #page 4 of tapia thesis
+                                scc_of_eCyc = nx.strongly_connected_components(
+                                    causality_graph)  # page 4 of tapia thesis
 
 
                             else:
-                                #for(Vector<String> aux : visitedeCycs.get(ecyc)){
-            					#trace = replaceClear(trace, aux, ecyc);
-            				    #}
-            				    #if(visitedeCycs.get(ecyc).size() == 0){
-            				    #	trace = removeAllXevent(trace, ecyc.get(0));
-            				    #}
-
-
+                        # for(Vector<String> aux : visitedeCycs.get(ecyc)){
+                        # trace = replaceClear(trace, aux, ecyc);
+                        # }
+                        # if(visitedeCycs.get(ecyc).size() == 0){
+                        #	trace = removeAllXevent(trace, ecyc.get(0));
+                        # }
 
     # Find the first elementary cyc in the trace
     def e_cyc(self, trace):
@@ -87,8 +86,29 @@ class ShorterStartTaskEndKeeper(object):
             for i in tinv_to_remove:
                 self.t_invariants.pop(i)
                 if add:
-                    self.t_invariants[len(self.t_invariants) + 1] = invariant_to_add #нужен ли тут этот +1?
+                    self.t_invariants[len(self.t_invariants) + 1] = invariant_to_add  # нужен ли тут этот +1?
 
-
-
-
+    def replace_clear(self):
+        #// Replace and Clear operations public XTrace replaceClear(XTrace trace, Vector < String > sc, Vector < String > cyc) удаляет из trace
+        #{
+        #    Vector < XEvent > removeXEvent = new Vector < XEvent > ();
+        #    int i = 0;
+        #    for (XEvent xevent: trace){ //
+        #       String task = classes.getClassOf(xevent).toString();
+        #       if ( i < cyc.size() ){
+        #           if (cyc.get(i).equals(task) & & sc.contains(cyc.get(i))){
+        #               i++;
+        #              removeXEvent.add(xevent);
+        #           } else if ( cyc.get(i).equals(task) ){
+        #               i++;
+        #           }
+        #       } else {
+        #           break;
+        #       }
+        #   }
+        #   / *remover por evento * /
+        #   for (XEvent rXevent: removeXEvent){
+        #       trace.remove(rXevent);
+        #   }
+        #   return trace;
+        #}
